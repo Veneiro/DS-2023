@@ -1,124 +1,72 @@
 package editor;
 
-import java.io.*;
+import java.io.PrintStream;
+
+import editor.herramientas.HeramientaSeleccion;
+import editor.herramientas.Herramienta;
 
 public class Editor {
-	
+
+	private Drawing drawing;
+	private PrintStream output = System.out;
+	public static boolean DEBUG;
+	private Herramienta selectionTool;
+	private Herramienta currentTool;
+
 	public Editor() {
-		this(new Drawing());
+		setDrawing(new Drawing());
+		this.output = new PrintStream(System.out, true);
+		final HeramientaSeleccion selectionTool = new HeramientaSeleccion(this);
+		this.selectionTool = selectionTool;
+		this.currentTool = selectionTool;
 	}
-	
+
 	public Editor(Drawing drawing) {
 		setDrawing(drawing);
 	}
-	
-	//$ Métodos del dibujo --------------------------------
-	
+
+	// $ Métodos del dibujo --------------------------------
+
 	public Drawing getDrawing() {
 		return drawing;
 	}
-		
+
 	public void setDrawing(Drawing drawing) {
 		this.drawing = drawing;
 	}
-		
+
 	public void drawDocument() {
-		drawing.draw();
-	}	
-		
-    //$ Menú principal (IU) -------------------------------
-	
-	public void run() throws IOException {
-		
-		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		PrintStream output = System.out;
-		
-		showHelp(output);
-		do {
-			output.print("> ");
-			output.flush();
-			
-			// Pregunta al usuario por consola y la línea introducida en dos partes: el nombre de
-			// la herramienta o acción, por un lado, y todos los parámetros adicionales, en caso
-			// de haberlos (todo lo que venga tras el primer espacio), por otro; p. ej.:
-			//
-			//     > pulsar 100, 100 ---> tokens = [ "pulsar",  "100, 100" ]
-			//
-			String[] tokens = input.readLine().split("[ ]", 2);
-			String action = tokens[0];
-			
-			// Comprueba que a las acciones que no requieren parámetros, efectivamente no se les
-			// pase ninguno (por usabilidad, para que el usuario se dé cuenta de que la última 
-			// acción no funciona como él esperaba). Por ejemplo, si por equivocación tecleó:
-			//
-			// 		"soltar 200, 345"
-			//
-			// cuando realmente esas coordenadas no son tenidas en cuenta (se debería haber
-			// llamado previamente a "mover 200, 345" y luego simplemente "soltar").
-			//
-			if (!action.equals("pulsar") && !action.equals("mover")) {
-				if (tokens.length > 1) {
-					output.printf("Error de sintaxis: \"%s\" no tiene parámetros\n", action);
-					return;
-				}
-			}
-			
-			if (action.equals("salir")) {
-				output.println("¡Adios!");
-				return;
-			}
-			
-			if (action.equals("seleccion")) {
-				// TODO: editor.______(...);
-			} else if (action.equals("rectangulo")) {
-				// TODO: editor.______(...);
-			} else if (action.equals("circulo")) {
-				// TODO: editor.______(...);
-			} else if (action.equals("triangulo")) {
-				// TODO: editor.______(...);
-			} else if (action.equals("pulsar")) {
-				try {
-					// la siguiente línea es para que funcione independientemente de si las coordenadas
-					// están separadas sólo por una coma o si hay espacios entre los números y la coma
-					String[] arguments = tokens[1].split("\\s*,\\s*");
-					int x = Integer.parseInt(arguments[0]);
-					int y = Integer.parseInt(arguments[1]);
-					// TODO: editor.______(...);
-				} catch (NumberFormatException e) {
-					output.println("Error de sintaxis: se esperaban las coordenadas del punto en que se hizo clic: pulsar <x>, <y>");
-				}
-			} else if (action.equals("mover")) {
-				try {
-					// la siguiente línea es para que funcione independientemente de si las coordenadas
-					// están separadas sólo por una coma o si hay espacios entre los números y la coma
-					String[] arguments = tokens[1].split("\\s*,\\s*");
-					int x = Integer.parseInt(arguments[0]);
-					int y = Integer.parseInt(arguments[1]);
-					// TODO: editor.______(...);
-				} catch (NumberFormatException e) {
-					output.println("Error de sintaxis: se esperaban las coordenadas del punto adonde se movió el cursor: mover <x>, <y>");
-				}
-			} else if (action.equals("soltar")) {
-				// TODO: editor.______(...);
-			} else if (action.equals("dibujar")) {
-				drawDocument();
-			} else if (action.equals("ayuda")) {
-				showHelp(output);
-			} else {
-				output.println("Acción desconocida");
-				showHelp(output);
-			}
-		} while (true);
+		this.drawing.draw(this.output);
 	}
 
-	private void showHelp(PrintStream output)
-	{
-		output.println("");
-		output.println("Herramientas: seleccion - rectangulo - circulo - triangulo");
-		output.println("Acciones del ratón: pulsar <x>,<y> - mover <x>,<y> - soltar");
-		output.println("Otras acciones: dibujar - ayuda - salir");
-		output.println("-----------------------------------------------------------");
+	public void selectTool(final Herramienta tool) {
+		if (tool == null) {
+			throw new IllegalArgumentException(
+					"¡No se puede seleccionar una herramienta nula!");
+		}
+		this.currentTool = tool;
+		this.trace("Se seleccion\u00f3 la herramienta: " + tool);
 	}
-	
-	private Drawing drawing;
+
+	public void toolDone() {
+		this.selectTool(this.selectionTool);
+	}
+
+	public void clickedOn(final int x, final int y) {
+		this.currentTool.clickOn(x, y);
+	}
+
+	public void movedTo(final int x, final int y) {
+		this.currentTool.moveTo(x, y);
+	}
+
+	public void released() {
+		this.currentTool.release();
+	}
+
+	public void trace(final String message) {
+		if (Editor.DEBUG) {
+			this.output.println(message);
+		}
+	}
 }
