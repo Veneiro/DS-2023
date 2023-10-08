@@ -1,12 +1,12 @@
 package editor;
 
+import figures.Herramienta;
+
 public class Drawing  {
 	
-	/*
-	public addFigure(...) {
-		// TO DO
-	}
-	*/
+//	public void addFigure(Herramienta figura) {
+//		
+//	}
 
 	public void draw() {
 		System.out.println("Estoy vacío (por ahora)");
