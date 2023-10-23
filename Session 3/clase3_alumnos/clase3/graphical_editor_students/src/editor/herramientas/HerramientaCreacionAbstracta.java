@@ -2,6 +2,7 @@ package editor.herramientas;
 
 import editor.Editor;
 import editor.figuras.Figure;
+import editor.historial.actions.CreateAction;
 
 public abstract class HerramientaCreacionAbstracta implements Herramienta {
 	private Editor editor;
@@ -54,6 +55,8 @@ public abstract class HerramientaCreacionAbstracta implements Herramienta {
 		}
 		final Figure newFigure = this.createFigure(this.boundingBox);
 		this.editor.getDrawing().addFigure(newFigure);
+		this.editor.getHistorial()
+				.add(new CreateAction(editor.getDrawing(), newFigure));
 		this.editor.trace("Se cre\u00f3 la figura: " + newFigure);
 		this.editor.toolDone();
 		this.boundingBox = null;

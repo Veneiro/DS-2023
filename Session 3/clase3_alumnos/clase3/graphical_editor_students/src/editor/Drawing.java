@@ -10,7 +10,7 @@ public class Drawing {
 
 	private List<Figure> figures;
 	private Figure currentSelection;
-
+	
 	public Drawing() {
 		this.figures = new ArrayList<Figure>();
 	}

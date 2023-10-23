@@ -4,6 +4,7 @@ import java.io.PrintStream;
 
 import editor.herramientas.HeramientaSeleccion;
 import editor.herramientas.Herramienta;
+import editor.historial.Historial;
 
 public class Editor {
 
@@ -12,6 +13,7 @@ public class Editor {
 	public static boolean DEBUG;
 	private Herramienta selectionTool;
 	private Herramienta currentTool;
+	private Historial historial = new Historial();
 
 	public Editor() {
 		setDrawing(new Drawing());
@@ -64,9 +66,21 @@ public class Editor {
 		this.currentTool.release();
 	}
 
+	public void undo() {
+		getHistorial().undo();
+	}
+
+	public void redo() {
+		getHistorial().redo();
+	}
+
 	public void trace(final String message) {
 		if (Editor.DEBUG) {
 			this.output.println(message);
 		}
+	}
+
+	public Historial getHistorial() {
+		return historial;
 	}
 }

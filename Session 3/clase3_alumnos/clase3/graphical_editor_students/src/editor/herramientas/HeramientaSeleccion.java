@@ -2,11 +2,14 @@ package editor.herramientas;
 
 import editor.Editor;
 import editor.figuras.Figure;
+import editor.historial.actions.MoveAction;
 
 public class HeramientaSeleccion implements Herramienta {
 	private Editor editor;
 	private int x;
 	private int y;
+	private int dx;
+	private int dy;
 	private Figure selectedFigure;
 
 	public HeramientaSeleccion(final Editor editor) {
@@ -51,6 +54,8 @@ public class HeramientaSeleccion implements Herramienta {
 				x, y));
 		this.selectedFigure.moveBy(x - this.x, y - this.y);
 		this.editor.trace("Se movi\u00f3 la figura: " + this.selectedFigure);
+		this.dx += x - this.x;
+		this.dy += y - this.y;
 		this.setPosition(x, y);
 	}
 
@@ -58,6 +63,8 @@ public class HeramientaSeleccion implements Herramienta {
 		this.editor.trace(String.format(
 				"Se solt\u00f3 el bot\u00f3n del rat\u00f3n con la herramienta de selecci\u00f3n en (%d, %d)",
 				this.x, this.y));
+		this.editor.getHistorial().add(
+				new MoveAction(this.selectedFigure, this.dx, this.dy));
 		this.selectedFigure = null;
 	}
 

@@ -143,6 +143,10 @@ public class Menu {
 			this.editor.drawDocument();
 		} else if (action.equals("ayuda")) {
 			showHelp(output);
+		} else if (action.equals("deshacer")) {
+			this.editor.undo();
+		} else if (action.equals("rehacer")) {
+			this.editor.redo();
 		} else {
 			output.println("Acción desconocida");
 			showHelp(output);
@@ -156,7 +160,7 @@ public class Menu {
 				"Herramientas: seleccion - rectangulo - circulo - triangulo");
 		output.println(
 				"Acciones del ratón: pulsar <x>,<y> - mover <x>,<y> - soltar");
-		output.println("Otras acciones: dibujar - ayuda - salir");
+		output.println("Otras acciones: dibujar - deshacer - rehacer - ayuda - salir");
 		output.println(
 				"-----------------------------------------------------------");
 	}
