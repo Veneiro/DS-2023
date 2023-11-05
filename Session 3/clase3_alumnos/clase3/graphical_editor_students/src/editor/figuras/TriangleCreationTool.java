@@ -2,6 +2,7 @@ package editor.figuras;
 
 import editor.Editor;
 import editor.herramientas.Herramienta;
+import editor.historial.actions.CreateAction;
 
 public class TriangleCreationTool implements Herramienta {
 	private Editor editor;
@@ -34,10 +35,13 @@ public class TriangleCreationTool implements Herramienta {
 		} else if (this.vertices == 3) {
 			this.x3 = x;
 			this.y3 = y;
-			this.editor.getDrawing().addFigure(new Triangle(this.x1, this.y1,
-					this.x2, this.y2, this.x3, this.y3));
+			Figure f = new Triangle(this.x1, this.y1,
+					this.x2, this.y2, this.x3, this.y3);
+			this.editor.getDrawing().addFigure(f);
 			this.vertices = 0;
 			this.editor.toolDone();
+			this.editor.getHistorial()
+			.add(new CreateAction(editor.getDrawing(), f));
 		}
 	}
 
