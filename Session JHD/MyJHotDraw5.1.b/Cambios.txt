@@ -1,0 +1,14 @@
+Este ZIP proviene del JHotDraw5.1 (JHD51.ZIP) con las siguientes diferencias:
+
+- Se ha añadido el ejemplo "CH.ifa.draw.samples.nada" para ver como es el framework antes de insertarle nada. Es el programa mínimo. 
+
+- Se ha eliminado el paquete "CH.ifa.draw.samples.nothing" (es sustituido por el anterior).
+
+- Se ha añadido un ejemplo de un editor básico de diagramas de clases UML en "ric\jhotdraw\UML\draw".
+
+- Se han añadido BATs para ejecutar la versión standalone de todos los ejemplos.
+
+- Se han eliminado los HTML para lanzar los ejemplos en versión applet. Los applets ya no tienen soporte.
+
+Raúl Izquierdo Castanedo
+raul@uniovi.es
